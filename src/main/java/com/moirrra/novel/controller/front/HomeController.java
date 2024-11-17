@@ -20,7 +20,7 @@ import java.util.List;
  * @Version: 1.0
  */
 @RestController
-@RequestMapping(ApiRouterConsts.HOME_URL_PREFIX)
+@RequestMapping(ApiRouterConsts.API_FRONT_HOME_URL_PREFIX)
 @RequiredArgsConstructor
 public class HomeController {
 

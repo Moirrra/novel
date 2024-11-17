@@ -11,7 +11,7 @@ public class ApiRouterConsts {
     /**
      * API请求路径前缀
      */
-    public static final String API_URL_PREFIX = "/api/";
+    public static final String API_URL_PREFIX = "/api";
 
     /**
      * 前台门户系统系统请求路径前缀

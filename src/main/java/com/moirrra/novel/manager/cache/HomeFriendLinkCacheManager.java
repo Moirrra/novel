@@ -1,4 +1,4 @@
-package com.moirrra.novel.manager;
+package com.moirrra.novel.manager.cache;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.moirrra.novel.core.constant.CacheConsts;
@@ -6,7 +6,6 @@ import com.moirrra.novel.dao.entity.HomeFriendLink;
 import com.moirrra.novel.dao.mapper.HomeFriendLinkMapper;
 import com.moirrra.novel.dto.resp.HomeFriendLinkRespDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;

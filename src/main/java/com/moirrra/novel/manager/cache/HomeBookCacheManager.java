@@ -1,4 +1,4 @@
-package com.moirrra.novel.manager;
+package com.moirrra.novel.manager.cache;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.moirrra.novel.core.constant.CacheConsts;
@@ -8,7 +8,6 @@ import com.moirrra.novel.dao.mapper.BookInfoMapper;
 import com.moirrra.novel.dao.mapper.HomeBookMapper;
 import com.moirrra.novel.dto.resp.HomeBookRespDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -59,6 +58,7 @@ public class HomeBookCacheManager {
                 return homeBooks.stream().map(v -> {
                     BookInfo bookInfo = bookInfoMap.get(v.getBookId());
                     HomeBookRespDto bookRespDto = new HomeBookRespDto();
+                    bookRespDto.setType(v.getType());
                     bookRespDto.setBookId(v.getBookId());
                     bookRespDto.setBookName(bookInfo.getBookName());
                     bookRespDto.setPicUrl(bookInfo.getPicUrl());
