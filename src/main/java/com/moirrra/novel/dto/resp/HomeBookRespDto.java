@@ -1,8 +1,8 @@
 package com.moirrra.novel.dto.resp;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
-import java.time.LocalDateTime;
 
 /**
  * @Author: Moirrra
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * @Description:
  * @Version: 1.0
  */
-
+@Data
 public class HomeBookRespDto {
 
     /**

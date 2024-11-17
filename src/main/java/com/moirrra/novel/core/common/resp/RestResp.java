@@ -1,6 +1,7 @@
 package com.moirrra.novel.core.common.resp;
 
 import com.moirrra.novel.core.common.constant.ErrorCodeEnum;
+import lombok.Getter;
 
 import java.util.Objects;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
  * @Description: Http Rest 响应数据格式 & 工具
  * @Version: 1.0
  */
-
+@Getter
 public class RestResp<T> {
 
     /**
