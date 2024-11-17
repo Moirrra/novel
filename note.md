@@ -182,3 +182,7 @@ https://baomidou.com/guides/new-code-generator/
 
 ##### Spring 对 cache的支持
 https://blog.csdn.net/zl1zl2zl3/article/details/110987968
+
+##### Mybatis-Plus IdWorker
+- IDWorker通过Mybatis Plus的插件机制集成到项目中，利用雪花算法为每个数据库实体生成唯一的ID
+- 
