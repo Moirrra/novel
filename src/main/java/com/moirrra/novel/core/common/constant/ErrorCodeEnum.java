@@ -46,6 +46,26 @@ public enum ErrorCodeEnum {
     USER_REGISTER_AREA_LIMIT_ERROR("A0102","注册国家或地区受限"),
 
     /**
+     * 用户验证码错误
+     */
+    USER_VERIFY_CODE_ERROR("A0103", "用户验证码错误"),
+
+    /**
+     * 用户名已存在
+     */
+    USER_NAME_EXIST("A0104", "用户名已存在"),
+
+    /**
+     * 用户账号不存在
+     */
+    USER_ACCOUNT_NOT_EXIST("A0201", "用户账号不存在"),
+
+    /**
+     * 用户密码错误
+     */
+    USER_PASSWORD_ERROR("A0210", "用户密码错误"),
+
+    /**
      * 二级宏观错误码，用户请求参数错误
      * */
     USER_REQUEST_PARAM_ERROR("A0400","用户请求参数错误"),
