@@ -29,7 +29,8 @@ public class HomeFriendLinkCacheManager {
      * 查询友情链接，并放入缓存
      * @return
      */
-    @Cacheable(cacheManager = CacheConsts.REDIS_CACHE_MANAGER, value = CacheConsts.HOME_FRIEND_LINK_CACHE_NAME)
+    @Cacheable(cacheManager = CacheConsts.REDIS_CACHE_MANAGER,
+            value = CacheConsts.HOME_FRIEND_LINK_CACHE_NAME)
     public List<HomeFriendLinkRespDto> listHomeFriendLinks() {
         QueryWrapper<HomeFriendLink> wrapper = new QueryWrapper<HomeFriendLink>()
                 .eq("is_open", 1)

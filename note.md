@@ -182,10 +182,26 @@ https://baomidou.com/guides/new-code-generator/
 
 ##### Spring 对 cache的支持
 https://blog.csdn.net/zl1zl2zl3/article/details/110987968
+- @Cacheable 查找缓存,有就返回,没有就执行方法体 - 将结果缓存起来(适用：查询数据)
+- @CachePut 执行方法体,将结果缓存起来(适用：更新数据)
 
 ##### Caffeine 本地缓存
 https://www.cnblogs.com/Chary/p/18050860
 
 ##### Mybatis-Plus IdWorker
 - IDWorker通过Mybatis Plus的插件机制集成到项目中，利用雪花算法为每个数据库实体生成唯一的ID
-- 
+
+
+##### SpringBoot 接收post请求中单个参数
+https://blog.csdn.net/llwutong/article/details/116273360 \
+https://blog.csdn.net/bachbrahms/article/details/85010338 
+- 问题：post请求携带一个参数，会识别为null
+- 原因：spring自带的参数解析器不支持解析这种传参，导致接收到的参数始终为null
+```java
+    @Operation(summary = "增加小说点击量接口")
+    @PostMapping("visit")
+    public RestResp<Void> addVisitCount(@Parameter(description = "小说ID") @RequestBody Map<String, Object> map) {
+        Long bookId = Long.valueOf(map.get("bookId").toString());
+        return bookService.addVisitCount(bookId);
+    }
+```

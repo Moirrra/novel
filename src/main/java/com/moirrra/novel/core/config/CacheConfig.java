@@ -24,12 +24,16 @@ import java.util.*;
  */
 @Configuration
 public class CacheConfig {
+    /**
+     * Caffeine 缓存管理器
+     * @return
+     */
     @Bean
     @Primary
     public CacheManager caffeineCacheManager() {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
-
         List<CaffeineCache> caches = new ArrayList<>(CacheConsts.CacheEnum.values().length);
+        // 循环添加枚举类中自定义的缓存
         for (CacheConsts.CacheEnum c : CacheConsts.CacheEnum.values()) {
             if (c.isLocal()) {
                 Caffeine<Object, Object> caffeine = Caffeine.newBuilder().recordStats().maximumSize(c.getMaxSize());
