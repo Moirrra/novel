@@ -1,6 +1,7 @@
 package com.moirrra.novel.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.moirrra.novel.core.common.constant.ErrorCodeEnum;
 import com.moirrra.novel.core.common.resp.RestResp;
 import com.moirrra.novel.core.constant.DatabaseConsts;
 import com.moirrra.novel.dao.entity.BookChapter;
@@ -11,6 +12,7 @@ import com.moirrra.novel.dao.mapper.BookChapterMapper;
 import com.moirrra.novel.dao.mapper.BookCommentMapper;
 import com.moirrra.novel.dao.mapper.BookInfoMapper;
 import com.moirrra.novel.dao.mapper.UserInfoMapper;
+import com.moirrra.novel.dto.req.UserCommentReqDto;
 import com.moirrra.novel.dto.resp.BookChapterAboutRespDto;
 import com.moirrra.novel.dto.resp.BookChapterRespDto;
 import com.moirrra.novel.dto.resp.BookCommentRespDto;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -163,6 +166,50 @@ public class BookServiceImpl implements BookService {
         }
 
         return RestResp.ok(bookCommentRespDto);
+    }
+
+    @Override
+    public RestResp<Void> saveComment(UserCommentReqDto dto) {
+        BookComment bookComment = new BookComment();
+        bookComment.setBookId(dto.getBookId());
+        bookComment.setUserId(dto.getUserId());
+        bookComment.setCommentContent(dto.getCommentContent());
+        bookComment.setCreateTime(LocalDateTime.now());
+        bookComment.setUpdateTime(LocalDateTime.now());
+        int count = bookCommentMapper.insert(bookComment);
+        if (count > 0) {
+            return RestResp.ok();
+        } else {
+            return RestResp.fail(ErrorCodeEnum.USER_COMMENT_INSERT_ERROR);
+        }
+    }
+
+    @Override
+    public RestResp<Void> updateComment(Long userId, Long id, String content) {
+        QueryWrapper<BookComment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(DatabaseConsts.CommonColumnEnum.ID.getName(), id)
+                .eq(DatabaseConsts.BookCommentTable.COLUMN_USER_ID, userId);
+        BookComment bookComment = new BookComment();
+        bookComment.setCommentContent(content);
+        int count = bookCommentMapper.update(bookComment, queryWrapper);
+        if (count > 0) {
+            return RestResp.ok();
+        } else {
+            return RestResp.fail(ErrorCodeEnum.USER_COMMENT_UPDATE_ERROR);
+        }
+    }
+
+    @Override
+    public RestResp<Void> deleteComment(Long userId, Long id) {
+    QueryWrapper<BookComment> queryWrapper = new QueryWrapper<>();
+    queryWrapper.eq(DatabaseConsts.CommonColumnEnum.ID.getName(), id)
+            .eq(DatabaseConsts.BookCommentTable.COLUMN_USER_ID, userId);
+        int count = bookCommentMapper.delete(queryWrapper);
+        if (count > 0) {
+            return RestResp.ok();
+        } else {
+            return RestResp.fail(ErrorCodeEnum.USER_COMMENT_DELETE_ERROR);
+        }
     }
 
 }

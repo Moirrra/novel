@@ -70,6 +70,26 @@ public enum ErrorCodeEnum {
      * */
     USER_REQUEST_PARAM_ERROR("A0400","用户请求参数错误"),
 
+    /**
+     * 用户评论异常
+     */
+    USER_COMMENT("A2000", "用户评论异常"),
+
+    /**
+     * 用户发表评论失败
+     */
+    USER_COMMENT_INSERT_ERROR("A2001", "用户发表评论失败"),
+
+    /**
+     * 用户修改评论失败
+     */
+    USER_COMMENT_UPDATE_ERROR("A2001", "用户修改评论失败"),
+
+    /**
+     * 用户删除评论失败
+     */
+    USER_COMMENT_DELETE_ERROR("A2002", "用户删除评论失败"),
+
     // ...省略若干用户端二级宏观错误码
 
     /**

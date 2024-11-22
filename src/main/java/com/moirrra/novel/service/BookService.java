@@ -2,6 +2,7 @@ package com.moirrra.novel.service;
 
 import com.moirrra.novel.core.common.resp.RestResp;
 import com.moirrra.novel.dao.entity.BookInfo;
+import com.moirrra.novel.dto.req.UserCommentReqDto;
 import com.moirrra.novel.dto.resp.BookChapterAboutRespDto;
 import com.moirrra.novel.dto.resp.BookCommentRespDto;
 import com.moirrra.novel.dto.resp.BookInfoRespDto;
@@ -42,7 +43,7 @@ public interface BookService {
     /**
      * 增加小说点击量
      * @param bookId 小说ID
-     * @return 空响应
+     * @return void
      */
     RestResp<Void> addVisitCount(Long bookId);
 
@@ -52,4 +53,28 @@ public interface BookService {
      * @return 小说最新评论
      */
     RestResp<BookCommentRespDto> listNewestComment(Long bookId);
+
+    /**
+     * 发表评论
+     * @param dto 用户评论DTO
+     * @return void
+     */
+    RestResp<Void> saveComment(UserCommentReqDto dto);
+
+    /**
+     * 修改评论
+     * @param userId 用户ID
+     * @param id 评论ID
+     * @param content 评论内容
+     * @return void
+     */
+    RestResp<Void> updateComment(Long userId, Long id, String content);
+
+    /**
+     * 删除评论
+     * @param userId 用户ID
+     * @param id 评论ID
+     * @return void
+     */
+    RestResp<Void> deleteComment(Long userId, Long id);
 }

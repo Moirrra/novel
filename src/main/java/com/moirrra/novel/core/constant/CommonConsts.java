@@ -13,6 +13,10 @@ public class CommonConsts {
 
     public static final Integer NO = 0;
 
+    public static final int COMMENT_MIN_LENGTH = 2;
+
+    public static final int COMMENT_MAX_LENGTH = 2048;
+
     public enum SexEnum {
         MALE(0, "男"),
         FEMALE(1, "女");
