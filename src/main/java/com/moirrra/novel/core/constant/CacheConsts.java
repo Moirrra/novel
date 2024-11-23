@@ -100,10 +100,12 @@ public class CacheConsts {
      * 缓存配置常量
      */
     public enum CacheEnum {
-        // 首页
+
         HOME_BOOK_CACHE(1, HOME_BOOK_CACHE_NAME, 0, 1),
 
         HOME_FRIEND_LINK_CACHE(2, HOME_FRIEND_LINK_CACHE_NAME, 1000, 1),
+
+        LATEST_NEWS_CACHE(0, LATEST_NEWS_CACHE_NAME, 60 * 10, 1),
 
         // 小说详情页
         BOOK_CATEGORY_LIST_CACHE(0, BOOK_CATEGORY_LIST_CACHE_NAME, 0, 2),
