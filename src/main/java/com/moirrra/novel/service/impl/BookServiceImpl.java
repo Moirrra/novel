@@ -13,13 +13,8 @@ import com.moirrra.novel.dao.mapper.BookCommentMapper;
 import com.moirrra.novel.dao.mapper.BookInfoMapper;
 import com.moirrra.novel.dao.mapper.UserInfoMapper;
 import com.moirrra.novel.dto.req.UserCommentReqDto;
-import com.moirrra.novel.dto.resp.BookChapterAboutRespDto;
-import com.moirrra.novel.dto.resp.BookChapterRespDto;
-import com.moirrra.novel.dto.resp.BookCommentRespDto;
-import com.moirrra.novel.dto.resp.BookInfoRespDto;
-import com.moirrra.novel.manager.cache.BookChapterCacheManager;
-import com.moirrra.novel.manager.cache.BookContentCacheManager;
-import com.moirrra.novel.manager.cache.BookInfoCacheManager;
+import com.moirrra.novel.dto.resp.*;
+import com.moirrra.novel.manager.cache.*;
 import com.moirrra.novel.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,6 +43,8 @@ public class BookServiceImpl implements BookService {
 
     private final BookContentCacheManager bookContentCacheManager;
 
+    private final BookCategoryCacheManager bookCategoryCacheManager;
+
     private final BookInfoMapper bookInfoMapper;
 
     private final BookChapterMapper bookChapterMapper;
@@ -60,6 +57,7 @@ public class BookServiceImpl implements BookService {
 
     private static final Integer CHAPTER_ABOUT_END = 100;
     private final BookCommentMapper bookCommentMapper;
+    private final BookRankCacheManager bookRankCacheManager;
 
     @Override
     public RestResp<BookInfoRespDto> getBookById(Long bookId) {
@@ -210,6 +208,103 @@ public class BookServiceImpl implements BookService {
         } else {
             return RestResp.fail(ErrorCodeEnum.USER_COMMENT_DELETE_ERROR);
         }
+    }
+
+
+    @Override
+    public RestResp<List<BookChapterRespDto>> listChapters(Long bookId) {
+        QueryWrapper<BookChapter> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(DatabaseConsts.BookChapterTable.COLUMN_BOOK_ID, bookId)
+                .orderByAsc(DatabaseConsts.BookChapterTable.COLUMN_CHAPTER_NUM);
+        List<BookChapterRespDto> list = bookChapterMapper.selectList(queryWrapper).stream()
+                .map(v -> BookChapterRespDto.builder()
+                        .id(v.getId())
+                        .chapterNum(v.getChapterNum())
+                        .chapterName(v.getChapterName())
+                        .bookId(v.getBookId())
+                        .chapterWordCount(v.getWordCount())
+                        .chapterUpdateTime(v.getUpdateTime())
+                        .isVip(v.getIsVip())
+                        .build()).toList();
+        return RestResp.ok(list);
+    }
+
+    @Override
+    public RestResp<BookContentAboutRespDto> getBookContentAbout(Long chapterId) {
+        // 查询章节信息
+        BookChapterRespDto bookChapterRespDto = bookChapterCacheManager.getChapter(chapterId);
+
+        // 查询小说信息
+        BookInfoRespDto bookInfoRespDto = bookInfoCacheManager.getBookInfo(bookChapterRespDto.getBookId());
+
+        // 查询章节内容
+        String bookContent = bookContentCacheManager.getBookContent(chapterId);
+
+        return RestResp.ok(BookContentAboutRespDto.builder()
+                        .bookInfo(bookInfoRespDto)
+                        .chapterInfo(bookChapterRespDto)
+                        .bookContent(bookContent)
+                        .build());
+    }
+
+    @Override
+    public RestResp<Long> getPreChapterId(Long chapterId) {
+        // 查询本章节信息
+        BookChapterRespDto bookChapterRespDto = bookChapterCacheManager.getChapter(chapterId);
+        Long bookId = bookChapterRespDto.getBookId();
+        Integer chapterNum = bookChapterRespDto.getChapterNum();
+
+        // 查询上一章节信息
+        QueryWrapper<BookChapter> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(DatabaseConsts.BookChapterTable.COLUMN_BOOK_ID, bookId)
+                .lt(DatabaseConsts.BookChapterTable.COLUMN_CHAPTER_NUM, chapterNum)
+                .orderByDesc(DatabaseConsts.BookChapterTable.COLUMN_CHAPTER_NUM)
+                .last(DatabaseConsts.SqlEnum.LIMIT_1.getSql());
+        BookChapter bookChapter = bookChapterMapper.selectOne(queryWrapper);
+        if (bookChapter != null) {
+            return RestResp.ok(bookChapter.getId());
+        }
+        return RestResp.ok(null);
+    }
+
+    @Override
+    public RestResp<Long> getNextChapterId(Long chapterId) {
+        // 查询本章节信息
+        BookChapterRespDto bookChapterRespDto = bookChapterCacheManager.getChapter(chapterId);
+        Long bookId = bookChapterRespDto.getBookId();
+        Integer chapterNum = bookChapterRespDto.getChapterNum();
+
+        // 查询下一章节信息
+        QueryWrapper<BookChapter> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(DatabaseConsts.BookChapterTable.COLUMN_BOOK_ID, bookId)
+                .gt(DatabaseConsts.BookChapterTable.COLUMN_CHAPTER_NUM, chapterNum)
+                .orderByAsc(DatabaseConsts.BookChapterTable.COLUMN_CHAPTER_NUM)
+                .last(DatabaseConsts.SqlEnum.LIMIT_1.getSql());
+        BookChapter bookChapter = bookChapterMapper.selectOne(queryWrapper);
+        if (bookChapter != null) {
+            return RestResp.ok(bookChapter.getId());
+        }
+        return RestResp.ok(null);
+    }
+
+    @Override
+    public RestResp<List<BookRankRespDto>> listVisitRankBooks() {
+        return RestResp.ok(bookRankCacheManager.listVisitRankBooks());
+    }
+
+    @Override
+    public RestResp<List<BookRankRespDto>> listNewestRankBooks() {
+        return RestResp.ok(bookRankCacheManager.listNewestRankBooks());
+    }
+
+    @Override
+    public RestResp<List<BookRankRespDto>> listUpdateRankBooks() {
+        return RestResp.ok(bookRankCacheManager.listUpdateRankBooks());
+    }
+
+    @Override
+    public RestResp<List<BookCategoryRespDto>> listCategory(Integer workDirection) {
+        return RestResp.ok(bookCategoryCacheManager.listCategory(workDirection));
     }
 
 }

@@ -3,9 +3,7 @@ package com.moirrra.novel.service;
 import com.moirrra.novel.core.common.resp.RestResp;
 import com.moirrra.novel.dao.entity.BookInfo;
 import com.moirrra.novel.dto.req.UserCommentReqDto;
-import com.moirrra.novel.dto.resp.BookChapterAboutRespDto;
-import com.moirrra.novel.dto.resp.BookCommentRespDto;
-import com.moirrra.novel.dto.resp.BookInfoRespDto;
+import com.moirrra.novel.dto.resp.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -77,4 +75,57 @@ public interface BookService {
      * @return void
      */
     RestResp<Void> deleteComment(Long userId, Long id);
+
+    /**
+     * 获取小说章节列表
+     * @param bookId 小说ID
+     * @return 小说章节列表
+     */
+    RestResp<List<BookChapterRespDto>> listChapters(Long bookId);
+
+    /**
+     * 查询小说内容相关信息
+     * @param chapterId 章节ID
+     * @return 小说内容相关信息
+     */
+    RestResp<BookContentAboutRespDto> getBookContentAbout(Long chapterId);
+
+    /**
+     * 获取上一章节ID
+     * @param chapterId 章节ID
+     * @return 上一章节ID
+     */
+    RestResp<Long> getPreChapterId(Long chapterId);
+
+    /**
+     * 获取下一章节ID
+     * @param chapterId 章节ID
+     * @return 下一章节ID
+     */
+    RestResp<Long> getNextChapterId(Long chapterId);
+
+    /**
+     * 查询小说点击榜
+     * @return 小说点击榜列表
+     */
+    RestResp<List<BookRankRespDto>> listVisitRankBooks();
+
+    /**
+     * 查询小说新书榜
+     * @return 小说新书榜列表
+     */
+    RestResp<List<BookRankRespDto>> listNewestRankBooks();
+
+    /**
+     * 查询小说更新榜
+     * @return 小说更新榜列表
+     */
+    RestResp<List<BookRankRespDto>> listUpdateRankBooks();
+
+    /**
+     * 获取小说分类
+     * @param workDirection 作品频道
+     * @return 小说分类列表
+     */
+    RestResp<List<BookCategoryRespDto>> listCategory(Integer workDirection);
 }
