@@ -1,6 +1,6 @@
 package com.moirrra.novel.dto.req;
 
-import com.moirrra.novel.core.constant.CommonConsts;
+import com.moirrra.novel.core.common.constant.CommonConsts;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -4,13 +4,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.moirrra.novel.core.common.constant.ErrorCodeEnum;
 import com.moirrra.novel.core.common.exception.BusinessException;
 import com.moirrra.novel.core.common.resp.RestResp;
+import com.moirrra.novel.core.constant.DatabaseConsts;
 import com.moirrra.novel.core.constant.SystemConfigConsts;
 import com.moirrra.novel.core.util.CommunityUtils;
 import com.moirrra.novel.core.util.JwtUtils;
 import com.moirrra.novel.dao.entity.UserInfo;
 import com.moirrra.novel.dao.mapper.UserInfoMapper;
+import com.moirrra.novel.dto.req.UserInfoUptReqDto;
 import com.moirrra.novel.dto.req.UserLoginReqDto;
 import com.moirrra.novel.dto.req.UserRegisterReqDto;
+import com.moirrra.novel.dto.resp.UserInfoRespDto;
 import com.moirrra.novel.dto.resp.UserLoginRespDto;
 import com.moirrra.novel.dto.resp.UserRegisterRespDto;
 import com.moirrra.novel.manager.redis.VerifyCodeManager;
@@ -101,5 +104,30 @@ public class UserServiceImpl implements UserService {
                 .uid(userInfo.getId())
                 .nickName(userInfo.getNickName())
                 .build());
+    }
+
+    @Override
+    public RestResp<UserInfoRespDto> getUserInfo(Long userId) {
+        UserInfo userInfo = userInfoMapper.selectById(userId);
+        return RestResp.ok(UserInfoRespDto.builder()
+                .nickName(userInfo.getNickName())
+                .userPhoto(userInfo.getUserPhoto())
+                .userSex(userInfo.getUserSex())
+                .build());
+    }
+
+    @Override
+    public RestResp<Void> updateUserInfo(UserInfoUptReqDto dto) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(dto.getUserId());
+        userInfo.setNickName(dto.getNickName());
+        userInfo.setUserPhoto(dto.getUserPhoto());
+        userInfo.setUserSex(dto.getUserSex());
+        int count = userInfoMapper.updateById(userInfo);
+        if (count > 0) {
+            return RestResp.ok();
+        } else {
+            return RestResp.fail(ErrorCodeEnum.USER_INFO_UPDATE_ERROR);
+        }
     }
 }

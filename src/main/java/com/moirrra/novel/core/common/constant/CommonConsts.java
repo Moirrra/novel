@@ -1,4 +1,4 @@
-package com.moirrra.novel.core.constant;
+package com.moirrra.novel.core.common.constant;
 
 /**
  * @Author: Moirrra
@@ -13,9 +13,15 @@ public class CommonConsts {
 
     public static final Integer NO = 0;
 
+    public static final int NICKNAME_MIN_LENGTH = 2;
+
+    public static final int NICKNAME_MAX_LENGTH = 10;
+
     public static final int COMMENT_MIN_LENGTH = 2;
 
     public static final int COMMENT_MAX_LENGTH = 2048;
+
+    public static final int SESSION_ID_LENGTH = 32;
 
     public enum SexEnum {
         MALE(0, "男"),

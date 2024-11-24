@@ -1,5 +1,6 @@
 package com.moirrra.novel.dto.req;
 
+import com.moirrra.novel.core.common.constant.CommonConsts;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -32,6 +33,6 @@ public class UserRegisterReqDto {
 
     @Schema(description = "sessionId", required = true)
     @NotBlank
-    @Length(min = 32, max = 32)
+    @Length(min = CommonConsts.SESSION_ID_LENGTH, max = CommonConsts.SESSION_ID_LENGTH)
     private String sessionId;
 }

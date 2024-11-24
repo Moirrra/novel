@@ -1,7 +1,11 @@
 package com.moirrra.novel.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.moirrra.novel.core.common.constant.ErrorCodeEnum;
+import com.moirrra.novel.core.common.req.PageReqDto;
+import com.moirrra.novel.core.common.resp.PageRespDto;
 import com.moirrra.novel.core.common.resp.RestResp;
 import com.moirrra.novel.core.constant.DatabaseConsts;
 import com.moirrra.novel.dao.entity.BookChapter;
@@ -19,6 +23,7 @@ import com.moirrra.novel.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -305,6 +310,38 @@ public class BookServiceImpl implements BookService {
     @Override
     public RestResp<List<BookCategoryRespDto>> listCategory(Integer workDirection) {
         return RestResp.ok(bookCategoryCacheManager.listCategory(workDirection));
+    }
+
+    @Override
+    public RestResp<PageRespDto<UserCommentRespDto>> listComments(Long userId, PageReqDto pageReqDto) {
+        // 设置分页
+        IPage<BookComment> page = new Page<>();
+        page.setCurrent(pageReqDto.getPageNum());
+        page.setSize(pageReqDto.getPageSize());
+        // 分页查询评论信息
+        QueryWrapper<BookComment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(DatabaseConsts.BookCommentTable.COLUMN_USER_ID, userId)
+                .orderByDesc(DatabaseConsts.CommonColumnEnum.UPDATE_TIME.getName());
+        IPage<BookComment> bookCommentPage = bookCommentMapper.selectPage(page, queryWrapper);
+        List<BookComment> comments = bookCommentPage.getRecords();
+        if (!CollectionUtils.isEmpty(comments)) {
+            // 查询小说信息
+            List<Long> bookIds = comments.stream().map(BookComment::getBookId).toList();
+            QueryWrapper<BookInfo> bookInfoQueryWrapper = new QueryWrapper<>();
+            bookInfoQueryWrapper.in(DatabaseConsts.CommonColumnEnum.ID.getName(), bookIds);
+            Map<Long, BookInfo> bookInfoMap = bookInfoMapper.selectList(bookInfoQueryWrapper).stream()
+                    .collect(Collectors.toMap(BookInfo::getId, Function.identity()));
+            // 组装
+            return RestResp.ok(PageRespDto.of(pageReqDto.getPageNum(), pageReqDto.getPageSize(), page.getTotal(),
+                    comments.stream().map(v -> UserCommentRespDto.builder()
+                            .commentContent(v.getCommentContent())
+                            .commentBook(bookInfoMap.get(v.getBookId()).getBookName())
+                            .commentBookPic(bookInfoMap.get(v.getBookId()).getPicUrl())
+                            .commentTime(v.getCreateTime())
+                            .build()).toList()));
+        }
+        return RestResp.ok(PageRespDto.of(pageReqDto.getPageNum(), pageReqDto.getPageSize(), page.getTotal(),
+                Collections.emptyList()));
     }
 
 }

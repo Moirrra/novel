@@ -38,7 +38,7 @@ public enum ErrorCodeEnum {
     /**
      * 二级宏观错误码，用户未同意隐私协议
      */
-    USER_NO_AGREE_PRIVATE_ERROR("A0101", "用户为同意隐私协议"),
+    USER_NO_AGREE_PRIVATE_ERROR("A0101", "用户未同意隐私协议"),
 
     /**
      * 二级宏观错误码，注册国家或地区受限
@@ -69,6 +69,11 @@ public enum ErrorCodeEnum {
      * 二级宏观错误码，用户请求参数错误
      * */
     USER_REQUEST_PARAM_ERROR("A0400","用户请求参数错误"),
+
+    /**
+     * 用户修改信息失败
+     */
+    USER_INFO_UPDATE_ERROR("A0401","用户修改信息失败"),
 
     /**
      * 用户评论异常

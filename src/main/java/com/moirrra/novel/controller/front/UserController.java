@@ -1,11 +1,16 @@
 package com.moirrra.novel.controller.front;
 
 import com.moirrra.novel.core.auth.UserHolder;
+import com.moirrra.novel.core.common.req.PageReqDto;
+import com.moirrra.novel.core.common.resp.PageRespDto;
 import com.moirrra.novel.core.common.resp.RestResp;
 import com.moirrra.novel.core.constant.ApiRouterConsts;
 import com.moirrra.novel.dto.req.UserCommentReqDto;
+import com.moirrra.novel.dto.req.UserInfoUptReqDto;
 import com.moirrra.novel.dto.req.UserLoginReqDto;
 import com.moirrra.novel.dto.req.UserRegisterReqDto;
+import com.moirrra.novel.dto.resp.UserCommentRespDto;
+import com.moirrra.novel.dto.resp.UserInfoRespDto;
 import com.moirrra.novel.dto.resp.UserLoginRespDto;
 import com.moirrra.novel.dto.resp.UserRegisterRespDto;
 import com.moirrra.novel.service.BookService;
@@ -45,6 +50,19 @@ public class UserController {
         return userService.login(userLoginReqDto);
     }
 
+    @Operation(summary = "用户信息查询接口")
+    @GetMapping
+    public RestResp<UserInfoRespDto> getUserInfo() {
+        return userService.getUserInfo(UserHolder.getUserId());
+    }
+
+    @Operation(summary = "用户信息修改接口")
+    @PutMapping
+    public RestResp<Void> updateUserInfo(@Valid @RequestBody UserInfoUptReqDto dto) {
+        if (dto.getUserId() == null) dto.setUserId(UserHolder.getUserId());
+        return userService.updateUserInfo(dto);
+    }
+
     @Operation(summary = "发表评论接口")
     @PostMapping("comment")
     public RestResp<Void> comment(@Valid @RequestBody UserCommentReqDto dto) {
@@ -63,5 +81,14 @@ public class UserController {
     @DeleteMapping("comment/{id}")
     public RestResp<Void> deleteComment(@Parameter(description = "评论ID") @PathVariable Long id) {
         return bookService.deleteComment(UserHolder.getUserId(), id);
+    }
+
+    /**
+     * 分页查询评论
+     */
+    @Operation(summary = "分页查询评论列表接口")
+    @GetMapping("comments")
+    public RestResp<PageRespDto<UserCommentRespDto>> listComments(PageReqDto pageReqDto) {
+        return bookService.listComments(UserHolder.getUserId(), pageReqDto);
     }
 }

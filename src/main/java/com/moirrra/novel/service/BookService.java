@@ -1,5 +1,7 @@
 package com.moirrra.novel.service;
 
+import com.moirrra.novel.core.common.req.PageReqDto;
+import com.moirrra.novel.core.common.resp.PageRespDto;
 import com.moirrra.novel.core.common.resp.RestResp;
 import com.moirrra.novel.dao.entity.BookInfo;
 import com.moirrra.novel.dto.req.UserCommentReqDto;
@@ -128,4 +130,12 @@ public interface BookService {
      * @return 小说分类列表
      */
     RestResp<List<BookCategoryRespDto>> listCategory(Integer workDirection);
+
+    /**
+     * 分页查询用户评论
+     * @param userId 用户ID
+     * @param pageReqDto 分页查询请求DTO
+     * @return 用户评论分页查询响应DTO
+     */
+    RestResp<PageRespDto<UserCommentRespDto>> listComments(Long userId, PageReqDto pageReqDto);
 }
