@@ -4,7 +4,7 @@ import com.moirrra.novel.core.common.req.PageReqDto;
 import com.moirrra.novel.core.common.resp.PageRespDto;
 import com.moirrra.novel.core.common.resp.RestResp;
 import com.moirrra.novel.dao.entity.BookInfo;
-import com.moirrra.novel.dto.req.UserCommentReqDto;
+import com.moirrra.novel.dto.req.*;
 import com.moirrra.novel.dto.resp.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -138,4 +138,55 @@ public interface BookService {
      * @return 用户评论分页查询响应DTO
      */
     RestResp<PageRespDto<UserCommentRespDto>> listComments(Long userId, PageReqDto pageReqDto);
+
+    /**
+     * 保存小说信息
+     * @param dto 小说信息
+     * @return void
+     */
+    RestResp<Void> saveBook(BookAddReqDto dto);
+
+    /**
+     * 查询作家发布小说列表
+     * @param dto 分页请求DTO
+     * @return 小说分页列表数据
+     */
+    RestResp<PageRespDto<BookInfoRespDto>> listAuthorBooks(PageReqDto dto);
+
+    /**
+     * 保存小说章节信息
+     * @param dto  章节新增 请求DTO
+     * @return
+     */
+    RestResp<Void> saveBookChapter(ChapterAddReqDto dto);
+
+    /**
+     * 查询小说章节
+     * @param chapterId 章节ID
+     * @return 章节内容
+     */
+    RestResp<ChapterContentRespDto> getBookChapter(Long chapterId);
+
+    /**
+     * 删除小说章节
+     * @param chapterId 章节ID
+     * @return void
+     */
+    RestResp<Void> deleteBookChapter(Long chapterId);
+
+    /**
+     * 更新小说章节
+     * @param chapterId 章节ID
+     * @param dto 章节发布 请求DTO
+     * @return void
+     */
+    RestResp<Void> updateBookChapter(Long chapterId, ChapterUpdateReqDto dto);
+
+    /**
+     * 查询小说发布章节列表
+     * @param bookId 小说ID
+     * @param dto 分页请求DTO
+     * @return 章节分页列表数据
+     */
+    RestResp<PageRespDto<BookChapterRespDto>> listBookChapters(Long bookId, PageReqDto dto);
 }

@@ -66,6 +66,11 @@ public enum ErrorCodeEnum {
     USER_PASSWORD_ERROR("A0210", "用户密码错误"),
 
     /**
+     * 访问未授权
+     */
+    USER_UN_AUTH("A0301", "访问未授权"),
+
+    /**
      * 二级宏观错误码，用户请求参数错误
      * */
     USER_REQUEST_PARAM_ERROR("A0400","用户请求参数错误"),
@@ -95,7 +100,20 @@ public enum ErrorCodeEnum {
      */
     USER_COMMENT_DELETE_ERROR("A2002", "用户删除评论失败"),
 
-    // ...省略若干用户端二级宏观错误码
+    /**
+     * 作家发布异常
+     */
+    AUTHOR_PUBLISH("A3000", "作家发布异常"),
+
+    /**
+     * 小说名已存在
+     */
+    AUTHOR_BOOK_NAME_EXIST("A3001", "小说名已存在"),
+
+    /**
+     * 用户已注册为作家
+     */
+    AUTHOR_EXIST("A3002", "用户已注册为作家"),
 
     /**
      * 一级宏观错误码，系统执行出错
